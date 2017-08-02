@@ -42,9 +42,9 @@ end
 
 module ApplicationHelper
     quotes<input
-        type=\quoteshidden\quotes
-        name=\quotesauthenticity_token\quotes
-        value=\quoteshashtag{ form_authenticity_token }\quotes>quotes.html_safe
+        type=slashquoteshiddenslashquotes
+        name=slashquotesauthenticity_tokenslashquotes
+        value=slashquoteshashtag{ form_authenticity_token }slashquotes>quotes.html_safe
   end
 end
 
