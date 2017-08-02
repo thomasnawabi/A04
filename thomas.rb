@@ -115,29 +115,21 @@ end
 
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-
-  # Expose these methods to the views
   helper_method :current_user, :signed_in?
-
-  private
   def current_user
     @current_user ||= User.find_by_session_token(session[:session_token])
   end
-
   def signed_in?
     !!current_user
   end
-
   def sign_in(user)
     @current_user = user
     session[:session_token] = user.reset_token!
   end
-
   def sign_out
     current_user.try(:reset_token!)
     session[:session_token] = nil
   end
-
   def require_signed_in!
     redirect_to new_session_url unless signed_in?
   end
@@ -148,10 +140,8 @@ class UsersController < ApplicationController
   def new
     @user = User.new
   end
-
   def create
     @user = User.new(user_params)
-
     if @user.save
       sign_in(@user)
       redirect_to links_url
@@ -160,7 +150,6 @@ class UsersController < ApplicationController
       render :new
     end
   end
-
   private
   def user_params
     params.require(:user).permit(:password, :username)
@@ -172,13 +161,10 @@ end
 class SessionsController < ApplicationController
   def new
   end
-
   def create
     user = User.find_by_credentials(
       params[:user][:username],
-      params[:user][:password]
-    )
-
+      params[:user][:password])
     if user
       sign_in(user)
       redirect_to links_url
@@ -187,20 +173,16 @@ class SessionsController < ApplicationController
       render :new
     end
   end
-
   def destroy
     sign_out
     redirect_to new_session_url
   end
-
-
 end
 
 
 
 class LinksController < ApplicationController
   before_filter :require_signed_in!
-
   def index
     @links = Link.all
   end
@@ -424,7 +406,6 @@ routes
 
 Links::Application.routes.draw do
   root to: "sessions#new"
-
   resources :users, only: [:new, :create]
   resource :session, only: [:new, :create, :destroy]
   resources :links
